@@ -8,7 +8,7 @@ def test_user_api():
     user_api = UserAPI(BASE_URL)
     
     try:
-        # 1. Create user
+        
         print("1. Create user - START")
         result = user_api.create_user({
             "id": 1,
@@ -23,7 +23,7 @@ def test_user_api():
         print("1. Create user - COMPLETE")
         print(f"Result: {result}")
         
-        # 2. Get user
+        
         print("2. Get user - START")
         result = user_api.get_user_by_username("testuser")
         print("2. Get user - COMPLETE")
@@ -37,7 +37,7 @@ def test_store_api():
     store_api = StoreAPI(BASE_URL)
     
     try:
-        # 1. Get inventory
+        
         print("1. Get inventory - START")
         result = store_api.get_inventory()
         print("1. Get inventory - COMPLETE")

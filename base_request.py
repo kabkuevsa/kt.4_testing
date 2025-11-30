@@ -7,33 +7,32 @@ class BaseRequest:
 
     def _request(self, url, request_type, data=None, expected_error=False):
         stop_flag = False
-        max_attempts = 3  # Добавляем ограничение попыток
+        max_attempts = 3  
         attempts = 0
         
         while not stop_flag and attempts < max_attempts:
             attempts += 1
             try:
                 if request_type == 'GET':
-                    response = requests.get(url, timeout=10)  # Добавляем timeout
+                    response = requests.get(url, timeout=10)  
                 elif request_type == 'POST':
-                    response = requests.post(url, json=data, timeout=10)  # Исправляем на json
+                    response = requests.post(url, json=data, timeout=10)  
+                elif request_type == 'PUT':  # ДОБАВЛЕНО
+                    response = requests.put(url, json=data, timeout=10)
                 else:
                     response = requests.delete(url, timeout=10)
 
-                # Условие выхода из цикла
                 if not expected_error and response.status_code == 200:
                     stop_flag = True
                 elif expected_error:
                     stop_flag = True
                 else:
-                    # Если не ожидаем ошибку, но статус не 200, выходим
                     stop_flag = True
 
             except requests.exceptions.RequestException as e:
                 print(f"Request error: {e}")
-                stop_flag = True  # Выходим при ошибке
-
-        # log part
+                stop_flag = True  
+        
         pprint.pprint(f'{request_type} example')
         pprint.pprint(f'URL: {url}')
         pprint.pprint(f'Status Code: {response.status_code}')
@@ -55,6 +54,11 @@ class BaseRequest:
     def post(self, endpoint, endpoint_id, body):
         url = f'{self.base_url}/{endpoint}/{endpoint_id}'
         response = self._request(url, 'POST', data=body)
+        return response.json() if response.text else {}
+
+    def put(self, endpoint, endpoint_id, body):  # ДОБАВЛЕНО
+        url = f'{self.base_url}/{endpoint}/{endpoint_id}'
+        response = self._request(url, 'PUT', data=body)
         return response.json() if response.text else {}
 
     def delete(self, endpoint, endpoint_id):

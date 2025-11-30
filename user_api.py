@@ -14,8 +14,7 @@ class UserAPI(BaseRequest):
     
     def update_user(self, username, user_data):
         """Update user - PUT /user/{username}"""
-        # Для PUT запроса нужно расширить базовый класс
-        return self.post("user", username, user_data)
+        return self.put("user", username, user_data)  # ИСПРАВЛЕНО: post -> put
     
     def delete_user(self, username):
         """Delete user - DELETE /user/{username}"""
